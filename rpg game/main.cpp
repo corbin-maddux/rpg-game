@@ -1,15 +1,23 @@
 #include "raylib.h"
-
-int main(){
-    InitWindow(800, 450, "My RPG");
-    SetTargetFPS(60);
-
-    while (!WindowShouldClose()){
+#include "Config.h"
+#include "states/GameStateManager.h"
+ 
+int main() {
+    InitWindow(Config::SCREEN_WIDTH, Config::SCREEN_HEIGHT, Config::GAME_TITLE.c_str());
+    SetTargetFPS(Config::FPS);
+ 
+    GameStateManager manager;
+ 
+    while (!WindowShouldClose() && manager.isRunning()) {
+        float dt = GetFrameTime();
+ 
+        manager.handleInput();
+        manager.update(dt);
+ 
         BeginDrawing();
-        ClearBackground(RAYWHITE);
-        DrawText("H!", 300, 200, 30, BLACK);
+        manager.render();
         EndDrawing();
     }
+ 
     CloseWindow();
     return 0;
-}
